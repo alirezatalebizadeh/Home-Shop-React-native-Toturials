@@ -27,7 +27,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (fontsLoaded) {
       console.log("font loaded");
-      
+
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
@@ -36,10 +36,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="sign-in" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <Stack screenOptions={{ headerShown: false }} />
       <StatusBar style="auto" />
     </ThemeProvider>
   );
