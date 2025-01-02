@@ -1,14 +1,36 @@
 import React from 'react'
-import { Image, ScrollView, View, Text, TouchableOpacity } from 'react-native'
+import { Image, ScrollView, View, Text, TouchableOpacity, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 //! Icons
 import images from '@/constants/images'
 import icons from '@/constants/icons'
+import { login } from '@/lib/appwrite'
+import { useGlobalContext } from '@/lib/global-provider'
+import { Redirect } from 'expo-router'
 
 const SignIn = () => {
-    const handlePress = () => {
 
+    const { refetch, loading, isLoggedIn } = useGlobalContext()
+
+    if (!loading && isLoggedIn) return <Redirect href="/" />
+
+    const handleLogin = async () => {
+        const result = await login()
+
+        if (result) {
+            refetch()
+            console.log("login success");
+
+        } else {
+            Alert.alert("Error", "Faild to  login")
+        }
     }
+
+
+    const handlePress = () => {
+    }
+
+
     return (
         <SafeAreaView className="bg-white h-full">
             <ScrollView contentContainerClassName="h-full text-center">
@@ -30,7 +52,7 @@ const SignIn = () => {
                     <Text className='text-lg font-rubik
                      text-black-100 text-center mt-12'>Login to Real Scout with Google
                     </Text>
-                    <TouchableOpacity onPress={handlePress}
+                    <TouchableOpacity onPress={handleLogin}
                         className='bg-white shadow-md
                          shadow-zinc-300 rounded-full w-full py-4 mt-5'>
                         <View className='flex flex-row items-center justify-center '>
