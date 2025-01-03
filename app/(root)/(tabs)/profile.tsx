@@ -6,6 +6,7 @@ import images from '@/constants/images'
 import { settings } from '@/constants/data'
 import { useGlobalContext } from '@/lib/global-provider'
 import { logout } from '@/lib/appwrite'
+import { Redirect } from 'expo-router'
 
 interface SettingItemsProp {
     icon: ImageSourcePropType,
@@ -41,15 +42,17 @@ const Profile = () => {
 
 
     const handleLogout = async () => {
-        const result = await logout()
+        // const result = await logout()
 
-        if (result) {
-            Alert.alert("Success", "You have been logged out successfully")
+        // if (result) {
+        //     Alert.alert("Success", "You have been logged out successfully")
 
-            refetch()
-        } else {
-            Alert.alert("Error", "An error occurred while  logging out")
-        }
+        //     refetch()
+        // } else {
+        //     Alert.alert("Error", "An error occurred while  logging out")
+        // }
+        <Redirect href="/sign-in" />
+
     }
 
     return (
@@ -67,20 +70,18 @@ const Profile = () => {
                     <Image source={icons.bell} className="size-5" />
                 </View>
                 {/* //! profile image */}
-                <View
-                    className='flex flex-row  justify-center mt-5'>
-                    <View className='flex flex-col justify-center  relative mt-5'>
-                        <Image source={images.avatar} className='size-44 relative rounded-full' />
-                        <TouchableOpacity className='absolute bottom-11 right-2'>
-                            <Image
-                                source={icons.edit}
-                                className='size-9'
-                            />
+                <View className="flex flex-row justify-center mt-5">
+                    <View className="flex flex-col items-center relative mt-5">
+                        <Image
+                            source={images.avatar}
+                            className="size-44 relative rounded-full"
+                        />
+                        <TouchableOpacity className="absolute bottom-11 right-2">
+                            <Image source={icons.edit} className="size-4" />
                         </TouchableOpacity>
-                        <Text
-                            className='text-xl font-rubik-bold mt-2 '>{user?.name ? user.name : "Alireza | React Native"}</Text>
-                    </View>
 
+                        <Text className="text-2xl font-rubik-bold mt-2">{user?.name ? user.name : "Alireza Talebizadeh"}</Text>
+                    </View>
                 </View>
 
                 {/* //! Links */}
