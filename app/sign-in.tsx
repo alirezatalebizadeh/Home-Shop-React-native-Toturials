@@ -6,9 +6,10 @@ import images from '@/constants/images'
 import icons from '@/constants/icons'
 import { login } from '@/lib/appwrite'
 import { useGlobalContext } from '@/lib/global-provider'
-import { Redirect } from 'expo-router'
+import { Redirect, router, useRouter } from 'expo-router'
 
 const SignIn = () => {
+    const router = useRouter()
 
     const { refetch, loading, isLoggedIn } = useGlobalContext()
 
@@ -18,6 +19,7 @@ const SignIn = () => {
         const result = await login()
 
         if (result) {
+            router.replace("/")
             refetch()
             console.log("login success");
 
@@ -27,8 +29,7 @@ const SignIn = () => {
     }
 
 
-    const handlePress = () => {
-    }
+
 
 
     return (

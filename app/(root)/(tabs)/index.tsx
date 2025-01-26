@@ -1,24 +1,78 @@
-import { View, Text, SafeAreaView, Image, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
-import { Link } from 'expo-router'
+import { View, Text, SafeAreaView, Image, TouchableOpacity, FlatList, Button, ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
+import { Link, useLocalSearchParams } from 'expo-router'
 import images from '@/constants/images'
 import icons from '@/constants/icons'
 import Search from '@/components/Search'
 import { Card, FeturedCard } from '@/components/Cards'
 import Filter from '@/components/Filter'
+import { useGlobalContext } from '@/lib/global-provider'
+import { useAppwrite } from '@/lib/useAppwrite'
+import { getLatestProperties, getProperties } from '@/lib/appwrite'
+import NoResults from '@/components/NoResults'
 
 const index = () => {
+    const { user } = useGlobalContext()
+    const params = useLocalSearchParams<{
+        query?: string;
+        filter?: string
+    }>()
+
+    const { data: latestProperties, loading } = useAppwrite({ fn: getLatestProperties })
+
+
+    const {
+        data: properties,
+        refetch
+
+    } = useAppwrite({
+        fn: getProperties,
+        params: {
+            filter: params.filter!,
+            query: params.query!,
+            limit: 6
+        },
+        skip: true
+    })
+
+
+    useEffect(() => {
+
+        refetch({
+            filter: params.filter!,
+            query: params.query!,
+            limit: 6
+        })
+
+    }, [params.filter, params.query])
+
+    const handleCardPress = (cardId: any) => {
+        console.log("card click");
+
+    }
+
+
 
 
     return (
-        <SafeAreaView className='bg-white h-full'>
+        <SafeAreaView className='bg-white h-full px-2'>
+            {/* <Button title='seen' onPress={getLatestProperties} /> */}
             <FlatList
                 data={[1, 2, 3, 4]}
-                renderItem={({ item }) => <Card />}
-                // keyExtractor={(item) => item.toString()}
+                renderItem={({ item }) => (
+                    <Card item={item} onPress={() => handleCardPress(item)} />
+                )}
+                keyExtractor={(item) => item.toString()}
                 contentContainerClassName='pb-32'
                 columnWrapperClassName='flex gap-5 mt-5'
                 numColumns={2}
+                ListEmptyComponent={
+                    loading ? (
+                        <ActivityIndicator
+                            size="large"
+                            className='text-primary-300 mt-5' />
+                    ) : <NoResults />
+                }
                 //! Header component => First Component in List
                 ListHeaderComponent={() => (
                     <View className='px-5'>
@@ -53,21 +107,15 @@ const index = () => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-
                         <FlatList
-                            data={[1, 2, 3]}
-                            renderItem={({ item }) => <FeturedCard />}
+                            data={[5, 6, 7, 8]}
+                            renderItem={({ item }) => <FeturedCard item={item} />}
                             keyExtractor={(item) => item.toString()}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             contentContainerClassName='flex gap-5 mt-5'
-                        // bounces={false}
                         />
-                        {/* <View className='flex flex-row gap-5 mt-5'>
-                            <FeturedCard />
-                            <FeturedCard />
-                            <FeturedCard />
-                        </View> */}
+
 
 
                         {/* //!Recommendation */}
@@ -84,13 +132,6 @@ const index = () => {
 
                         {/* //! Filter search */}
                         <Filter />
-
-                        {/* <View className='flex flex-row gap-5 mt-5'>
-
-                            <Card />
-                            <Card />
-                        </View> */}
-
                     </View>
                 )}
             />

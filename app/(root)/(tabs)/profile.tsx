@@ -6,7 +6,7 @@ import images from '@/constants/images'
 import { settings } from '@/constants/data'
 import { useGlobalContext } from '@/lib/global-provider'
 import { logout } from '@/lib/appwrite'
-import { Redirect } from 'expo-router'
+import { Redirect, useRouter } from 'expo-router'
 
 interface SettingItemsProp {
     icon: ImageSourcePropType,
@@ -37,6 +37,8 @@ const SettingIcons = ({ icon, title, onPress, textStyle, showArrow = true }: Set
 
 const Profile = () => {
 
+    const router = useRouter()
+
     const { user, refetch } = useGlobalContext();
     console.log("User Profile = ", user);
 
@@ -51,7 +53,8 @@ const Profile = () => {
         // } else {
         //     Alert.alert("Error", "An error occurred while  logging out")
         // }
-        <Redirect href="/sign-in" />
+        // <Redirect href="/sign-in" />
+        router.push("/sign-in")
 
     }
 
